@@ -2,6 +2,8 @@
 
 - 간단한 offscreencanvas 실습 저장소입니다.
 - 실습은 CRA 환경에서 진행되었습니다.
+- 주된 내용은 기존의 이미지 load와 같이 시간이 소요되는 요소를 메인쓰레드가 아닌 worker 쓰레드에서 처리함으로써, 
+- 성능향상을 도모했습니다.
 - web worker의 경우 웹팩 버전(5이상 여부) 및 CRA에 따라 추가적인 설정이 필요합니다.
 
 - **웹팩 5이상**의 경우 can use without `[worker-loader](https://github.com/webpack-contrib/worker-loader)`
