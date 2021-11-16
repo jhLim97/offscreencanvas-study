@@ -1,25 +1,42 @@
 import React, { useRef, useEffect } from "react";
 
+const objCanvas = document.createElement('canvas');
 const PlayerCanvas = () => {
   const canvasRef = useRef(null);
+  const objectList = ['/buildBuilding.png', '/buildObject.png', '/chat.png', '/fileUpload.png', '/logout.png', '/person.png', '/setting.png', '/users.png', '/voiceChat.png'];
+  let x = 50;
+  let y = 50;
 
   useEffect(() => {
     const canvas = canvasRef.current;
 
-    const offscreen = canvas.transferControlToOffscreen();
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const ctx = canvas.getContext('2d');
+
+    const offscreen = objCanvas.transferControlToOffscreen();
     const worker = new Worker("../../workers/offscreencanvas.js", {
       type: "module",
     });
-    worker.onmessage = (e) => {
-      const reply = e.data;
-      console.log(reply);
-      // 아래 주석 지우면, worker thread에서 그려진 텍스트도 지워짐
-      // 학습해보자
-      //worker.terminate();
+
+    worker.onmessage = async (e) => {
+      const { imageBitmapList } = e.data;
+    
+      offscreen.width = window.innerWidth;
+      offscreen.height = window.innerHeight;
+      const offscreenCtx = offscreen.getContext('2d');
+      imageBitmapList.forEach(imageBitmap => {
+        offscreenCtx.drawImage(imageBitmap, x, y, 100, 100);
+        x += 110;    
+      });
+  
+      ctx.drawImage(offscreen, 0, 0);
+      worker.terminate();
     };
 
     const init = () => {
-      worker.postMessage({ canvas: offscreen }, [offscreen]);
+      worker.postMessage({ objectList: objectList });
     };
     init();
   }, []);

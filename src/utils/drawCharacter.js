@@ -1,11 +1,13 @@
-/* eslint-disable no-restricted-globals */
-//import playerImage from "../assets/Player32x32.png";
-//const playerObject = new Image();
-//playerObject.src = playerImage;
-
-const draw = async (ctx) => {
-  //ctx.drawImage(playerObject, 0, 0);
-  ctx.fillText("Hello world", 10, 50);
+const makeImageBitMapList = async (objectList) => {
+  const list = await Promise.all(objectList.map(async(objectURL) => await getImageBitMap(objectURL)));
+  return list;
 };
 
-export default draw;
+const getImageBitMap = async (imgUrl) => {
+  const response = await fetch(imgUrl);
+  const blob = await response.blob();
+  const imageBitmap = await createImageBitmap(blob);
+  return imageBitmap;
+}
+
+export default makeImageBitMapList;
