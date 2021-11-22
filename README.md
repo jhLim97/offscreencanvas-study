@@ -106,3 +106,6 @@ worker.onmessage = (e) => {
   console.log(e.data, canvas);
 };
 ```
+- 타입스크립트의 경우 별도의 패키지 설치가 필요합니다.
+   - `yarn add @types/offscreencanvas`
+   - `npm i @types/offscreencanvas`
